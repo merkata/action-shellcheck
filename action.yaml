@@ -214,14 +214,16 @@ runs:
             -print0)
 
         if [[ -n "${INPUT_CHECK_TOGETHER}" ]]; then
-          "${{ github.action_path }}/shellcheck" \
+          OUTPUT=$(eval "${{ github.action_path }}/shellcheck" \
             ${INPUT_SHELLCHECK_OPTIONS} \
-            "${filepaths[@]}" || statuscode=$?
+            "${filepaths[@]}") || statuscode=$?
+            echo "${OUTPUT//$'\n'/'%0A'}" >> $GITHUB_OUTPUT
         else
           for file in "${filepaths[@]}"; do
-            "${{ github.action_path }}/shellcheck" \
+            OUTPUT=$(eval "${{ github.action_path }}/shellcheck" \
               ${INPUT_SHELLCHECK_OPTIONS} \
-              "$file" || statuscode=$?
+              "$file") || statuscode=$?
+            echo "${OUTPUT//$'\n'/'%0A'}" >> $GITHUB_OUTPUT
           done
         fi
 
