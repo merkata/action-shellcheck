@@ -64,7 +64,7 @@ runs:
       run: |
         problem_matcher_file="${{ github.action_path }}/.github/problem-matcher-${INPUT_FORMAT}.json"
         if [[ "${INPUT_DISABLE_MATCHER}" != "true" && -f "$problem_matcher_file"  ]]; then
-          echo "::add-matcher::$problem_matcher_file"
+          echo "##[add-matcher]$problem_matcher_file"
         fi
 
     - name: Download shellcheck
@@ -214,16 +214,14 @@ runs:
             -print0)
 
         if [[ -n "${INPUT_CHECK_TOGETHER}" ]]; then
-          OUTPUT=$(eval "${{ github.action_path }}/shellcheck" \
+          "${{ github.action_path }}/shellcheck" \
             ${INPUT_SHELLCHECK_OPTIONS} \
-            "${filepaths[@]}") || statuscode=$?
-            echo "${OUTPUT//$'\n'/'%0A'}" >> $GITHUB_OUTPUT
+            "${filepaths[@]}" || statuscode=$?
         else
           for file in "${filepaths[@]}"; do
-            OUTPUT=$(eval "${{ github.action_path }}/shellcheck" \
+            "${{ github.action_path }}/shellcheck" \
               ${INPUT_SHELLCHECK_OPTIONS} \
-              "$file") || statuscode=$?
-            echo "${OUTPUT//$'\n'/'%0A'}" >> $GITHUB_OUTPUT
+              "$file" || statuscode=$?
           done
         fi
 
