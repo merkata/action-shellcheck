@@ -218,6 +218,7 @@ runs:
             ${INPUT_SHELLCHECK_OPTIONS} \
             "${filepaths[@]}") || statuscode=$?
               if [[ -n "${OUTPUT}" ]]; then
+                echo "${OUTPUT}"
                 echo "shellcheck_output=${OUTPUT//$'\n'/'%0A'} >> \$GITHUB_OUTPUT"
               fi
         else
@@ -226,6 +227,7 @@ runs:
               ${INPUT_SHELLCHECK_OPTIONS} \
               "$file") || statuscode=$?
               if [[ -n "${OUTPUT}" ]]; then
+                echo "${OUTPUT}"
                 echo "shellcheck_output=${OUTPUT//$'\n'/'%0A'} >> \$GITHUB_OUTPUT"
               fi
           done
